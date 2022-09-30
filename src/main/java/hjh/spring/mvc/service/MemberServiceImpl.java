@@ -11,18 +11,23 @@ public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	private MemberDAO mdao;
-	
+
 	@Override
 	public boolean newMember(MemberVO mvo) {
-		
+
 		boolean isInsert = false;
-		
-		//회원가입이 성공했으면 true를 리턴
-		if(mdao.insertMember(mvo) > 0) isInsert = true;
-		
+
+		// 회원가입이 성공했으면 true를 리턴
+		if (mdao.insertMember(mvo) > 0)
+			isInsert = true;
+
 		return isInsert;
 	}
 
-	
-	
+	@Override
+	public MemberVO readOneMember() {
+
+		return mdao.selectOneMember();
+	}
+
 }
