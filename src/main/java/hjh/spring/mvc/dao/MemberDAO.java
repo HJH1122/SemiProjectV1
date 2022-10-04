@@ -8,4 +8,6 @@ public interface MemberDAO {
 
 	MemberVO selectOneMember();
 
+	int selectOneMember(MemberVO m); //다중정리 (오버로딩)
+
 }

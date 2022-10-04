@@ -30,7 +30,7 @@ public class MemberDAOImpl implements MemberDAO {
 	
 	public MemberDAOImpl(DataSource dataSource) {
 		simpleInsert = new SimpleJdbcInsert(dataSource)
-				.withTableName("member") 
+				.withTableName("member")
 				.usingColumns("userid","passwd","name","email");
 		
 		jdbcNameTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -64,6 +64,18 @@ public class MemberDAOImpl implements MemberDAO {
 		};
 		
 		return jdbcTemplate.queryForObject(sql, null, memberMapper);
+	}
+
+
+	@Override
+	public int selectOneMember(MemberVO m) {
+		
+		String sql = "select count(mno) cnt from member where userid = ? and passwd = ?";
+		
+		Object[] params = { m.getUserid(), m.getPasswd() };
+		
+		return jdbcTemplate.queryForObject(sql, params, Integer.class);
+		
 	}
 	
 	
