@@ -21,15 +21,32 @@ public class BoardController {
 
 	private Logger LOGGER = LoggerFactory.getLogger(getClass());
 	
+	/* 페이징 처리 */
+	/* 페이지당 게시물 수perPage : 25 */
+	/* 총 페이지 수 : 전체 게시물 수 / 페이지당 게시물 수 */
+	/* 총 페이지 수pages : ceil(getTotalPage / perPage) */
+	/* 2페이지 = 50 / 25 , 3페이지 = 51 / 25 */
 	
+	/* 페이지별 읽어올 게시글 범위 */
+	/* 총 게시글이 55건 이라 할때 */
+	/* 1page : 1번째 ~ 25번째 게시글 읽어옴 */
+	/* 2page : 26번째 ~ 50번째 게시글 읽어옴  */
+	/* 3page : 51번째 ~ 75번째 게시글 읽어옴  */
+	/* ipage : m번째 ~ n번째 게시글 읽어옴 */
+	/* m = (i-1) * 25 + 1 */
+	/*  */
+	/*  */
 	
 	@Autowired
 	private BoardService bsrv;
 	
 	@GetMapping("/list")
-	public String list(Model m) {
+	public String list(Model m, String cpg) {
 		
-		m.addAttribute("bdlist", bsrv.readBoard());
+		int perPage = 25;
+		int snum = (Integer.parseInt(cpg) - 1) * perPage;
+		
+		m.addAttribute("bdlist", bsrv.readBoard(snum));
 		
 		return "board/list";
 		
