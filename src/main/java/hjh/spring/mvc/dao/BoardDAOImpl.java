@@ -20,7 +20,7 @@ import hjh.spring.mvc.vo.BoardVO;
 @Repository("bdao")
 public class BoardDAOImpl implements BoardDAO {
 
-		//@Autowired //bean 태그에 정의한 경우 생략가능
+		@Autowired //bean 태그에 정의한 경우 생략가능
 		private JdbcTemplate jdbcTemplate;
 		private SimpleJdbcInsert simpleInsert;
 		private NamedParameterJdbcTemplate jdbcNamedTemplate;
@@ -59,5 +59,20 @@ public class BoardDAOImpl implements BoardDAO {
 			
 			
 			return jdbcNamedTemplate.query(sql, Collections.emptyMap(), boardMapper);
+		}
+
+		@Override
+		public BoardVO selectOneBoard(String bno) {
+			
+			//본문글에 대한 조회수 증가시키기
+			String sql = "update board set views = views + 1 where bno = ?";
+			Object[] param = { bno };
+			
+			jdbcTemplate.update(sql, param);
+			
+			//본문글 가져오기
+			sql = "select * from board where bno = ?";
+		
+			return jdbcTemplate.queryForObject(sql, param, boardMapper);
 		}
 }
