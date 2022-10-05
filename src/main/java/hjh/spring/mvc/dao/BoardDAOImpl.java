@@ -70,15 +70,15 @@ public class BoardDAOImpl implements BoardDAO {
 			
 			sql.append(" select bno,title,userid,regdate,views from board");
 			
-			if(fkey.equals("title")) sql.append(" where title = :fval");
-			else if(fkey.equals("userid")) sql.append(" where userid = :fval");
-			else if(fkey.equals("contents")) sql.append(" where userid = :fval");
+			if(fkey.equals("title")) sql.append(" where title like :fval");
+			else if(fkey.equals("userid")) sql.append(" where userid like :fval");
+			else if(fkey.equals("contents")) sql.append(" where contents like :fval");
 			
 			sql.append(" order by bno desc limit :snum, 25");
 			
 			Map<String, Object> params = new HashMap<>();
 			params.put("snum", snum);
-			params.put("fval", fval);
+			params.put("fval", "%"+fval+"%");
 			
 			return jdbcNamedTemplate.query(sql.toString(), params, boardMapper);
 		}
@@ -102,11 +102,19 @@ public class BoardDAOImpl implements BoardDAO {
 		public int selectReadCountBoard(String fkey, String fval) {
 			
 			
-			String sql = "select ceil(count(bno)/25) pages from board";
+			StringBuilder sql = new StringBuilder();
+			
+			sql.append(" select ceil(count(bno)/25) pages from board ");
+			
+			if(fkey.equals("title")) sql.append("where title like :fval");
+			else if(fkey.equals("userid")) sql.append("where userid like :fval");
+			else if(fkey.equals("contents")) sql.append("where contents like :fval");
+			
+			Map<String, Object> param = new HashMap<>();
+			param.put("fval", "%" + fval + "%");
 			
 			
-			
-			return jdbcTemplate.queryForObject(sql, null, Integer.class);
+			return jdbcNamedTemplate.queryForObject(sql.toString(), param, Integer.class);
 			
 			
 			
