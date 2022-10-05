@@ -34,8 +34,24 @@ public class BoardController {
 	/* 3page : 51번째 ~ 75번째 게시글 읽어옴  */
 	/* ipage : m번째 ~ n번째 게시글 읽어옴 */
 	/* m = (i-1) * 25 + 1 */
-	/*  */
-	/*  */
+	
+	/* 현재 페이지에 따라 보여줄 페이지 블럭 결정 */
+	/* ex) 총 페이지수가 27일때  */
+	/* cpg = 1 : 1 2 3 4 5 6 7 8 9 10 */
+	/* cpg = 5 : 1 2 3 4 5 6 7 8 9 10 */
+	/* cpg = 8 : 1 2 3 4 5 6 7 8 9 10 */
+	/* cpg = 10 : 1 2 3 4 5 6 7 8 9 10 */
+	/* cpg = 11 : 11 12 13 14 15 16 17 18 19 20 */
+	/* cpg = 17 : 11 12 13 14 15 16 17 18 19 20 */
+	/* cpg = 23 : 21 22 23 24 25 26 27 */
+	/* cpg = 27 : 21 22 23 24 25 26 27 */
+	/* cpg = n : ?+0 ?+1 ?+2 ?+3 ... ?+9 */
+	/* stpgn = ((cpg - 1) / 10) * 10 + 1 */
+	/*   */
+	/*   */
+	
+	
+	
 	
 	@Autowired
 	private BoardService bsrv;
@@ -44,9 +60,17 @@ public class BoardController {
 	public String list(Model m, String cpg) {
 		
 		int perPage = 25;
-		int snum = (Integer.parseInt(cpg) - 1) * perPage;
+		if(cpg == null || cpg.equals("")) cpg = "1";
+		int cpage = Integer.parseInt(cpg);
+		
+		int snum = (cpage - 1) * perPage;
+		int stpgn =((cpage - 1) / 10) * 10 + 1;
 		
 		m.addAttribute("bdlist", bsrv.readBoard(snum));
+		m.addAttribute("stpgn", stpgn);
+		//m.addAttribute("cpg", cpage);  //cpg를 정수화해서 html로 보냄
+		
+		
 		
 		return "board/list";
 		
@@ -79,7 +103,7 @@ public class BoardController {
 		
 		bsrv.newBoard(bvo);
 		
-		return "redirect:/list";
+		return "redirect:/list?cpg=1";
 		
 	}
 	
