@@ -79,4 +79,18 @@ public class BoardDAOImpl implements BoardDAO {
 		
 			return jdbcTemplate.queryForObject(sql, param, boardMapper);
 		}
+
+		@Override
+		public int selectReadCountBoard() {
+			
+			
+			String sql = "select ceil(count(bno)/25) pages from board";
+			
+			
+			
+			return jdbcTemplate.queryForObject(sql, null, Integer.class);
+			
+			
+			
+		}
 }
