@@ -10,4 +10,6 @@ public interface MemberDAO {
 
 	int selectOneMember(MemberVO m); //다중정리 (오버로딩)
 
+	int selectCountUserid(String uid);
+
 }
