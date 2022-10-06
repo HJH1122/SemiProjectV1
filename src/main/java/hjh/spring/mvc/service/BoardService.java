@@ -13,6 +13,10 @@ public interface BoardService {
 	BoardVO readOneBoard(String bno);
 
 	int readCountBoard(String fkey, String fval);
+
+	boolean removeBoard(String bno);
+
+	boolean modifyBoard(BoardVO bvo);
 	
 
 }
